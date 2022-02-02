@@ -98,7 +98,7 @@ session_start();
   </div>
   <div class="form-group">
     <label for="Password">Password</label>
-    <input type="password" name="password" class="form-control" id="Password" placeholder="Password">
+    <input type="password" name="password" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{10,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required class="form-control" id="Password" placeholder="Password">
   </div>
   
   <button type="submit" class="btn btn-danger">Submit</button><br><br>
