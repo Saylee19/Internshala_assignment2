@@ -4,6 +4,7 @@ session_start();
 	include("connection.php");
 	include("functions.php");
 
+	global $msg;
 	if($_SERVER['REQUEST_METHOD'] == "POST")
 	{
 		//something was posted
@@ -11,22 +12,32 @@ session_start();
 		$phn_number = $_POST['phn_number'];
 		$user_email = $_POST['user_email'];
 		$password = $_POST['password'];
+		$cpassword = $_POST['cpassword'];
 
-		if(!empty($user_name) && !empty($phn_number) && !empty($user_email) && !empty($password) && !is_numeric($user_name))
+
+		if(!empty($user_name) && !empty($phn_number) && !empty($user_email) && !empty($password) && !empty($cpassword) && !is_numeric($user_name))
 		{
 
 			//save to database
 			$user_id = random_num(20);
-			$query = "insert into users (user_id,user_name,phn_number,user_email,password) values ('$user_id','$user_name','$phn_number','$user_email','$password')";
+			$query = "insert into users (user_id,user_name,phn_number,user_email,password,cpassword) values ('$user_id','$user_name','$phn_number','$user_email','$password','$cpassword')";
 
 			mysqli_query($con, $query);
 
-			header("Location: login.php");
-			die;
+            if ($_POST['password'] !== $_POST['cpassword']) {
+				echo " Password and Confirm password should match!" ; 
+			 }
+
+			else{
+				header("Location: login.php");
+				die;
+			}
 		}else
 		{
 			echo "Please enter some valid information!";
 		}
+
+		
 	}
 ?>
 
@@ -90,7 +101,7 @@ session_start();
   </div>
   <div class="form-group">
     <label for="phone">Phone Number</label>
-    <input type="text" name="phn_number" class="form-control" id="phone" placeholder="Enter phone number">
+    <input type="tel" name="phn_number" pattern="[7-9]{2}[0-9]{8}" class="form-control" id="phone" title="Give valid phone number" required placeholder="Enter phone number">
   </div>
   <div class="form-group">
     <label for="email">Email address</label>
@@ -99,6 +110,10 @@ session_start();
   <div class="form-group">
     <label for="Password">Password</label>
     <input type="password" name="password" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{10,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required class="form-control" id="Password" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="cpassword">Confirm Password</label>
+    <input type="password" name="cpassword"  required class="form-control" id="cpassword" placeholder="Confirm Password">
   </div>
   
   <button type="submit" class="btn btn-danger">Submit</button><br><br>
